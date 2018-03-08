@@ -7,19 +7,29 @@ import sys, tty, termios, signal
 ## Motor Establishment
 ######################
 
-motorL = 0
-motorR = 1
+FmotorL = 0
+FmotorR = 1
+BmotorL = 2
+BmotorR = 3
 
-motorR_forward = 2000
-motorR_backward = 1000
-motorL_forward = 1000
-motorL_backward = 2000
+FmotorR_forward = 2000
+FmotorR_backward = 1000
+FmotorL_forward = 1000
+FmotorL_backward = 2000
+BmotorR_forward = 2000
+BmotorR_backward = 1000
+BmotorL_forward = 1000
+BmotorL_backward = 2000
 
 try:
-  RPL.pinMode(motorL,RPL.SERVO)
-  RPL.servoWrite(motorL,1500)
-  RPL.pinMode(motorR,RPL.SERVO)
-  RPL.servoWrite(motorR,1500)
+  RPL.pinMode(FmotorL,RPL.SERVO)
+  RPL.servoWrite(FmotorL,1500)
+  RPL.pinMode(FmotorR,RPL.SERVO)
+  RPL.servoWrite(FmotorR,1500)
+  RPL.pinMode(BmotorL,RPL.SERVO)
+  RPL.servoWrite(BmotorL,1500)
+  RPL.pinMode(BmotorR,RPL.SERVO)
+  RPL.servoWrite(BmotorR,1500)
 except:
   pass
 
@@ -28,88 +38,168 @@ except:
 ######################
 def stopAll():
   try:
-    RPL.servoWrite(motorL,1500)
-    RPL.servoWrite(motorR,1500)
+    RPL.servoWrite(FmotorL,1500)
+    RPL.servoWrite(FmotorR,1500)
+    RPL.servoWrite(BmotorL,1500)
+    RPL.servoWrite(BmotorR,1500)
   except:
     print "error except"
     pass
 
-def forward():
-  RPL.servoWrite(motorL,motorL_forward)
-  RPL.servoWrite(motorR,motorR_forward)
+def Fforward():
+  RPL.servoWrite(FmotorL,FmotorL_forward)
+  RPL.servoWrite(FmotorR,FmotorR_forward)
 
-def reverse():
-  RPL.servoWrite(motorL,motorL_backward)
-  RPL.servoWrite(motorR,motorR_backward)
+def Bforward():
+  RPL.servoWrite(BmotorL,BmotorL_forward)
+  RPL.servoWrite(BmotorR,BmotorR_forward)
 
-def right():
-  RPL.servoWrite(motorL,1460)#motorL_forward)
-  RPL.servoWrite(motorR,1460)#motorR_backward)
+def Freverse():
+  RPL.servoWrite(FmotorL,FmotorL_backward)
+  RPL.servoWrite(FmotorR,FmotorR_backward)
 
-def left():
-  RPL.servoWrite(motorL,1540)#motorL_backward)
-  RPL.servoWrite(motorR,1540)#motorR_forward)
+def Breverse():
+  RPL.servoWrite(BmotorL,BmotorL_backward)
+  RPL.servoWrite(BmotorR,BmotorR_backward)
 
-def forward_right():
-  RPL.servoWrite(motorL,motorL_forward)
-  RPL.servoWrite(motorR,1500)
+def Fright():
+  RPL.servoWrite(FmotorL,1460)#motorL_forward)
+  RPL.servoWrite(FmotorR,1460)#motorR_backward)
 
-def forward_left():
-  RPL.servoWrite(motorL,1500)
-  RPL.servoWrite(motorR,motorR_forward)
+def Bright():
+  RPL.servoWrite(BmotorL,1460)#motorL_forward)
+  RPL.servoWrite(BmotorR,1460)#motorR_backward)
 
-def backward_right():
-  RPL.servoWrite(motorL,1500)
-  RPL.servoWrite(motorR,motorR_backward)
+def Fleft():
+  RPL.servoWrite(FmotorL,1540)#motorL_backward)
+  RPL.servoWrite(FmotorR,1540)#motorR_forward)
 
-def backward_left():
-  RPL.servoWrite(motorL,motorL_backward)
-  RPL.servoWrite(motorR,1500)
+def Bleft():
+  RPL.servoWrite(BmotorL,1540)#motorL_backward)
+  RPL.servoWrite(BmotorR,1540)#motorR_forward)
 
-def print_speed():
-  print '--FORWARD: Left Motor: ', motorL_forward, ' Right Motor: ', motorR_forward, '\r'
-  print '  BACKWARD: Left Motor: ', motorR_backward, ' Right Motor: ', motorL_backward, '\r'
+def Fforward_right():
+  RPL.servoWrite(FmotorL,FmotorL_forward)
+  RPL.servoWrite(FmotorR,1500)
 
-def forwardSpeedChanges(change, mn = 1600, mx = 2900):
-  global motorR_forward
-  global motorL_forward
-  motorR_forward += change
-  motorL_forward += change
-  motorR_forward = max(min(motorR_forward, mx), mn)
-  motorL_forward = max(min(motorL_forward, mx), mn)
+def Bforward_right():
+  RPL.servoWrite(BmotorL,BmotorL_forward)
+  RPL.servoWrite(BmotorR,1500)
+
+def Fforward_left():
+  RPL.servoWrite(FmotorL,1500)
+  RPL.servoWrite(FmotorR,FmotorR_forward)
+
+def Bforward_left():
+  RPL.servoWrite(BmotorL,1500)
+  RPL.servoWrite(BmotorR,BmotorR_forward)
+
+def Fbackward_right():
+  RPL.servoWrite(FmotorL,1500)
+  RPL.servoWrite(FmotorR,FmotorR_backward)
+
+def Bbackward_right():
+  RPL.servoWrite(BmotorL,1500)
+  RPL.servoWrite(BmotorR,BmotorR_backward)
+
+def Fbackward_left():
+  RPL.servoWrite(FmotorL,FmotorL_backward)
+  RPL.servoWrite(FmotorR,1500)
+
+def Bbackward_left():
+  RPL.servoWrite(BmotorL,BmotorL_backward)
+  RPL.servoWrite(BmotorR,1500)
+
+def Fprint_speed():
+  print 'Front--FORWARD: Left Motor: ', FmotorL_forward, ' Front--Right Motor: ', FmotorR_forward, '\r'
+  print 'Front--BACKWARD: Left Motor: ', FmotorR_backward, ' Front--Right Motor: ', FmotorL_backward, '\r'
+
+def Bprint_speed():
+  print 'Back--FORWARD: Left Motor: ', BmotorL_forward, ' Back--Right Motor: ', BmotorR_forward, '\r'
+  print 'Back--BACKWARD: Left Motor: ', BmotorR_backward, ' Back--Right Motor: ', BmotorL_backward, '\r'
+
+def FforwardSpeedChanges(change, mn = 1600, mx = 2900):
+  global FmotorR_forward
+  global FmotorL_forward
+  FmotorR_forward += change
+  FmotorL_forward += change
+  FmotorR_forward = max(min(FmotorR_forward, mx), mn)
+  FmotorL_forward = max(min(FmotorL_forward, mx), mn)
   print_speed()
 
-def backwardSpeedChanges(change, mn = 100, mx = 1400):
-  global motorR_backward
-  global motorL_backward
-  motorR_backward += change
-  motorL_backward += change
-  motorR_backward = max(min(motorR_backward, mx), mn)
-  motorL_backward = max(min(motorL_backward, mx), mn)
+def BforwardSpeedChanges(change, mn = 1600, mx = 2900):
+  global BmotorR_forward
+  global BmotorL_forward
+  BmotorR_forward += change
+  BmotorL_forward += change
+  BmotorR_forward = max(min(BmotorR_forward, mx), mn)
+  BmotorL_forward = max(min(BmotorL_forward, mx), mn)
   print_speed()
 
-def backwardRightSpeedChange(change, mn = 100, mx = 1400):
-  global motorR_backward
-  motorR_backward += change
-  motorR_backward = max(min(motorR_backward, mx), mn)
+def FbackwardSpeedChanges(change, mn = 100, mx = 1400):
+  global FmotorR_backward
+  global FmotorL_backward
+  FmotorR_backward += change
+  FmotorL_backward += change
+  FmotorR_backward = max(min(FmotorR_backward, mx), mn)
+  FmotorL_backward = max(min(FmotorL_backward, mx), mn)
+  print_speed()
+
+def BbackwardSpeedChanges(change, mn = 100, mx = 1400):
+  global BmotorR_backward
+  global BmotorL_backward
+  BmotorR_backward += change
+  BmotorL_backward += change
+  BmotorR_backward = max(min(BmotorR_backward, mx), mn)
+  BmotorL_backward = max(min(BmotorL_backward, mx), mn)
+  print_speed()
+
+def FbackwardRightSpeedChange(change, mn = 100, mx = 1400):
+  global FmotorR_backward
+  FmotorR_backward += change
+  FmotorR_backward = max(min(FmotorR_backward, mx), mn)
+  print_speed()
+
+def BbackwardRightSpeedChange(change, mn = 100, mx = 1400):
+  global BmotorR_backward
+  BmotorR_backward += change
+  BmotorR_backward = max(min(BmotorR_backward, mx), mn)
+  print_speed()
+
+def FbackwardLeftSpeedChange(change, mn = 100, mx = 1400):
+  global FmotorL_backward
+  FmotorL_backward += change
+  FmotorL_backward = max(min(FmotorL_backward, mx), mn)
   print_speed()
 
 def backwardLeftSpeedChange(change, mn = 100, mx = 1400):
-  global motorL_backward
-  motorL_backward += change
-  motorL_backward = max(min(motorL_backward, mx), mn)
+  global BmotorL_backward
+  BmotorL_backward += change
+  BmotorL_backward = max(min(BmotorL_backward, mx), mn)
   print_speed()
 
-def forwardRightSpeedChange(change, mn = 1600, mx = 2900):
-  global motorR_forward
-  motorR_forward += change
-  motorR_forward = max(min(motorR_forward, mx), mn)
+def FforwardRightSpeedChange(change, mn = 1600, mx = 2900):
+  global FmotorR_forward
+  FmotorR_forward += change
+  FmotorR_forward = max(min(FmotorR_forward, mx), mn)
   print_speed()
 
-def forwardLeftSpeedChange(change, mn = 1600, mx = 2900):
-  global motorL_forward
-  motorL_forward += change
-  motorL_forward = max(min(motorL_forward, mx), mn)
+def BforwardRightSpeedChange(change, mn = 1600, mx = 2900):
+  global BmotorR_forward
+  BmotorR_forward += change
+  BmotorR_forward = max(min(BmotorR_forward, mx), mn)
+  print_speed()
+
+def FforwardLeftSpeedChange(change, mn = 1600, mx = 2900):
+  global FmotorL_forward
+  FmotorL_forward += change
+  FmotorL_forward = max(min(FmotorL_forward, mx), mn)
+  print_speed()
+
+def BforwardLeftSpeedChange(change, mn = 1600, mx = 2900):
+  global BmotorL_forward
+  BmotorL_forward += change
+  BmotorL_forward = max(min(BmotorL_forward, mx), mn)
   print_speed()
 
 fd = sys.stdin.fileno() # I don't know what this does
@@ -138,44 +228,64 @@ while True:
     break # this ends the loop
   else:
     if ch == 'w':
-      forward()
+      Fforward()
+      Bforward()
     elif ch == "a":
-      left()
+      Fleft()
+      Bleft()
     elif ch == "s":
-      reverse()
+      Freverse()
+      Breverse()
     elif ch == "d":
-      right()
+      Fright()
+      Bright()
     elif ch == "e":
-      forward_right()
+      Fforward_right()
+      Bforward_right()
     elif ch == "q":
-      forward_left()
+      Fforward_left()
+      Bforward_left()
     elif ch == "z":
-      backward_left()
+      Fbackward_left()
+      Bbackward_left()
     elif ch == "c":
-      backward_right()
+      Fbackward_right()
+      Bbackward_right()
     elif ch == "]":
-      forwardSpeedChanges(100)
+      FforwardSpeedChanges(100)
+      BforwardSpeedChanges(100)
     elif ch == "[":
-      backwardSpeedChanges(-100)
+      FbackwardSpeedChanges(-100)
+      BbackwardSpeedChanges(-100)
     elif ch == "}":
-      forwardSpeedChanges(-100)
+      FforwardSpeedChanges(-100)
+      BforwardSpeedChanges(-100)
     elif ch == "{":
-      backwardSpeedChanges(100)
+      FbackwardSpeedChanges(100)
+      BbackwardSpeedChanges(100)
     elif ch == "1":
-      forwardLeftSpeedChange(100)
+      FforwardLeftSpeedChange(100)
+      BforwardLeftSpeedChange(100)
     elif ch == "!":
-      forwardLeftSpeedChange(-100)
+      FforwardLeftSpeedChange(-100)
+      BforwardLeftSpeedChange(-100)
     elif ch == "2":
-      forwardRightSpeedChange(100)
+      FforwardRightSpeedChange(100)
+      BforwardRightSpeedChange(100)
     elif ch == "@":
-      forwardRightSpeedChange(-100)
+      FforwardRightSpeedChange(-100)
+      BforwardRightSpeedChange(-100)
     elif ch == "3":
-      backwardLeftSpeedChange(-100)
+      FbackwardLeftSpeedChange(-100)
+      BbackwardLeftSpeedChange(-100)
     elif ch == "#":
-      backwardLeftSpeedChange(100)
+      FbackwardLeftSpeedChange(100)
+      BbackwardLeftSpeedChange(100)
     elif ch == "4":
-      backwardRightSpeedChange(-100)
+      FbackwardRightSpeedChange(-100)
+      BbackwardRightSpeedChange(-100)
     elif ch == "$":
-      backwardRightSpeedChange(100)
+      FbackwardRightSpeedChange(100)
+      BbackwardRightSpeedChange(100)
     else:
       stopAll()
