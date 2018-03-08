@@ -7,8 +7,8 @@ import sys, tty, termios, signal
 ## Motor Establishment
 ######################
 
-motorL = 1
-motorR = 0
+motorL = 0
+motorR = 1
 
 motorR_forward = 2000
 motorR_backward = 1000
